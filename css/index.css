@@ -1,0 +1,12 @@
+body{
+    background-color:#0d1219;
+}
+#jumbo-header{
+    text-align: center;
+    font-size: 40px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 50px;
+}
+#jumbo-emoji{
+    text-align: center;
+}
