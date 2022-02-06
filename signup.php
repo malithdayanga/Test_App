@@ -11,6 +11,7 @@ if(isset($_POST['submit'])){
   $lastname = "";
   $email = "";
   $password = "";
+  $msg = "";
 
 $firstname = input_varify($_POST['firstname']);
 $lastname = input_varify($_POST['lastname']);
@@ -18,15 +19,37 @@ $email = input_varify($_POST['email']);
 $password = input_varify($_POST['password']);
 
 
-$query = "INSERT INTO user(Fname,Lname,email,pwd,Reg_dt) 
-VALUES('{$firstname}','{$lastname}','{$email}','{$password}',now())";
+$query1 = "SELECT * FROM user WHERE Fname = '{$firstname}' AND Lname = '{$lastname}'";
 
-$result = mysqli_query($conn, $query);
+$ShowResult = mysqli_query($conn, $query1);
 
-if($result){
-  echo "User registration success";
-}else{
-  echo mysqli_error($conn);
+if($ShowResult){
+  if(mysqli_num_rows($ShowResult) == 1){
+    $msg = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Sorry !!</strong> This user already exists.
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>&times;</span>
+    </button>
+  </div>";
+
+  }else{
+    $query = "INSERT INTO user(Fname,Lname,email,pwd,Reg_dt) 
+    VALUES('{$firstname}','{$lastname}','{$email}','{$password}',now())";
+    
+    $result = mysqli_query($conn, $query);
+    
+    if($result){
+      $msg = "<div class='alert alert-primary alert-dismissible fade show' role='alert'>
+      <strong>User Registration Success ..!!</strong> Welcome to MD Coders.
+      <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
+      </button>
+    </div>";
+    
+    }else{
+      echo mysqli_error($conn);
+    }
+  }
 }
 }
 
@@ -70,6 +93,12 @@ return $data;
                     <div class="card-body" id="card-body">
 
                     <form action="signup.php" method="POST" autocomplete="off">
+
+                    <?php
+                    if(!empty($msg)){
+                      echo $msg;
+                    }
+?>
 
                         <div class="form-group">
                           <label for="">First Name</label>
